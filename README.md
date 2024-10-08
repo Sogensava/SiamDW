@@ -1,3 +1,9 @@
+To use dockerfile: 
+cd /<path_to_repo>/SiamDW
+docker build -t siamrpn_image .
+docker run -it --gpus all --name siamrpn siamrpn_image
+
+
 # Deeper and Wider Siamese Networks for Real-Time Visual Tracking
 We are hiring research interns for visual tracking and neural architecture search projects: houwen.peng@microsoft.com
 

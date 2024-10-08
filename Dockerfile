@@ -157,7 +157,7 @@ RUN cd ./SiamDW
 RUN mkdir ./snapshot
 RUN cd ./snapshot 
 WORKDIR /home/vot_ws/SiamDW/snapshot
-RUN gdown https://drive.google.com/file/d/1tBllNtv-90Ih2EP_lnRCBzxnZeFPRnPx
+RUN gdown 1tBllNtv-90Ih2EP_lnRCBzxnZeFPRnPx
 WORKDIR /home/vot_ws/SiamDW
 RUN cd ..
 
