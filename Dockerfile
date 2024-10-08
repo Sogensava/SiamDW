@@ -34,8 +34,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     --allow-change-held-packages \
     build-essential \
-    bzip2=1.0.6-8.1ubuntu0.2 \
-    libbz2-1.0=1.0.6-8.1ubuntu0.2 \
+    bzip2 \
+    libbz2-1.0\
     systemd \
     git \
     wget \
@@ -64,20 +64,20 @@ RUN mkdir -p /var/run/sshd /root/.ssh
 
 # Inference
 # Copy logging utilities, nginx and rsyslog configuration files, IOT server binary, etc.
-COPY --from=inferencing-assets /artifacts /var/
-RUN /var/requirements/install_system_requirements.sh && \
-    cp /var/configuration/rsyslog.conf /etc/rsyslog.conf && \
-    cp /var/configuration/nginx.conf /etc/nginx/sites-available/app && \
-    ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app && \
-    rm -f /etc/nginx/sites-enabled/default
-ENV SVDIR=/var/runit
-ENV WORKER_TIMEOUT=300
-EXPOSE 5001 8883 8888
+# COPY --from=inferencing-assets /artifacts /var/
+# RUN /var/requirements/install_system_requirements.sh && \
+#     cp /var/configuration/rsyslog.conf /etc/rsyslog.conf && \
+#     cp /var/configuration/nginx.conf /etc/nginx/sites-available/app && \
+#     ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app && \
+#     rm -f /etc/nginx/sites-enabled/default
+# ENV SVDIR=/var/runit
+# ENV WORKER_TIMEOUT=300
+# EXPOSE 5001 8883 8888
 
 # Conda Environment
 ENV MINICONDA_VERSION latest
 ENV PATH /opt/miniconda/bin:$PATH
-RUN wget -qO /tmp/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh && \
+RUN wget -qO /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
     bash /tmp/miniconda.sh -bf -p /opt/miniconda && \
     conda clean -ay && \
     rm -rf /opt/miniconda/pkgs && \
@@ -96,7 +96,7 @@ RUN mkdir /tmp/openmpi && \
     ldconfig && \
     rm -rf /tmp/openmpi
 
-RUN conda install -c r -y conda python=3.12.5 pip
+RUN conda install -c r -y conda python=3.9 pip
 RUN conda install -y numpy pyyaml ipython mkl scikit-learn matplotlib pandas setuptools Cython h5py graphviz libgcc mkl-include cmake cffi typing cython && \
     conda install -y -c mingfeima mkldnn && \
     conda install -c anaconda gxx_linux-64
@@ -104,7 +104,7 @@ RUN conda install -y numpy pyyaml ipython mkl scikit-learn matplotlib pandas set
 RUN conda install -c anaconda gxx_linux-64
 RUN conda clean -ya
 #RUN pip install boto3 addict tqdm regex pyyaml opencv-python opencv-contrib-python azureml-defaults nltk spacy future tensorboard wandb filelock tokenizers sentencepiece
-RUN pip install regex pyyaml opencv-contrib-python azureml-defaults future
+RUN pip install regex pyyaml opencv-contrib-python future
 
 # Set CUDA_ROOT
 RUN export CUDA_HOME="/usr/local/cuda"
@@ -137,27 +137,27 @@ RUN pip install PyYAML && \
     pip install wandb && \
     pip install tensorboardX && \
     pip install yacs && \
-    pip install timm 
-
+    pip install timm && \
+    pip install class_registry && \
+    pip install shapely && \
+    pip install gdown
 # conda env installation
-RUN conda install --file docker_requirements.txt
+# RUN conda install --file ./docker_requirements.txt
 
 # create workspace 
 RUN mkdir /home/vot_ws
 
-#RUN git clone https://github.com/votchallenge/toolkit /home/toolkit
-# WORKDIR /home/toolkit
-# RUN cd /home/toolkit && python /home/toolkit/setup.py install
+RUN git clone https://github.com/votchallenge/toolkit /home/toolkit
+WORKDIR /home/toolkit
+RUN cd /home/toolkit && python /home/toolkit/setup.py install
 WORKDIR /home/vot_ws
-RUN cd /home/vot_ws
 RUN vot initialize vot2022/shorttermbox --workspace .
-RUN git clone https://github.com/Sogensava/SiamDW/tree/master
+RUN git clone https://github.com/Sogensava/SiamDW.git
 RUN cd ./SiamDW
 RUN mkdir ./snapshot
 RUN cd ./snapshot 
 WORKDIR /home/vot_ws/SiamDW/snapshot
-ADD https://drive.google.com/drive/folders/19dBWxOqZnvM0FsgXGzH2Y7Bg7wgYMEoO  $WORKDIR/
-RUN cd DCFNet_pytorch/track && wget https://raw.githubusercontent.com/votchallenge/integration/refs/heads/master/python/vot.py
+RUN gdown https://drive.google.com/file/d/1tBllNtv-90Ih2EP_lnRCBzxnZeFPRnPx
 WORKDIR /home/vot_ws/SiamDW
 RUN cd ..
 
