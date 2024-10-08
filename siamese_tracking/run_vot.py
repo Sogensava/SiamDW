@@ -16,7 +16,7 @@ from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, loa
 
 import vot
 
-misato_path = "/home/atila/Pictures/misato/"
+#misato_path = "/home/atila/Pictures/misato/"
 
 display_name = 'Sequence'
 sequence_length = 300

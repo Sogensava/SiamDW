@@ -14,7 +14,7 @@ from tracker.siamrpn import SiamRPN
 from easydict import EasyDict as edict
 from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, load_dataset, poly_iou
 
-misato_path = "/home/atila/Pictures/misato/"
+#misato_path = "/home/atila/Pictures/misato/"
 
 display_name = 'Sequence'
 sequence_length = 300
