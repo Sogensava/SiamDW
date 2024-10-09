@@ -20,9 +20,9 @@ from tracker.siamrpn import SiamRPN
 from easydict import EasyDict as edict
 from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, load_dataset, poly_iou
 
-args = '--arch SiamRPNRes22 --resume snapshot/CIResNet22_RPN.pth'
+args = '--arch SiamRPNRes22 --resume snapshot/CIResNet22_RPN.pth --video /home/atila/Pictures/misato'
 arch = 'SiamRPNRes22'
-resume = '/home/vot_ws/SiamDW/snapshot/CIResNet22_RPN.pth'
+resume = '/home/atila/aliberk_ws/vot_ws/trackers/paper_imp/SiamDW/snapshot/CIResNet22_RPN.pth'
 
 handle = vot.VOT("rectangle")
 selection = handle.region()
